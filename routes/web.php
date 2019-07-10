@@ -17,4 +17,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::resource('author', 'AuthorController');
+Route::post('author/update/{id}', 'AuthorController@update');
+Route::resource('book', 'BookController');
+
 Route::get('/home', 'HomeController@index')->name('home');
