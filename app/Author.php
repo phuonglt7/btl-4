@@ -18,4 +18,26 @@ class Author extends Model
     {
         return $this->hasMany('app\Book', 'author_id', 'id');
     }
+
+    public function getPaginate()
+    {
+        return $this->paginate(5);
+    }
+
+    public function get()
+    {
+        return $this->all();
+    }
+
+
+    public function getWhere($key, $value)
+    {
+        return $this->where($key, $value)->paginate(5);
+    }
+
+    public function create(array $value)
+    {
+        return $this->insert($value);
+    }
+
 }

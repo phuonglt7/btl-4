@@ -23,4 +23,19 @@ class Book extends Model
     {
         return $this->belongsToMany('app\User', 'borrow_books', 'user_id', 'book_id');
     }
-}
+
+    public function get()
+    {
+        return $this->all();
+    }
+
+    public function get()
+    {
+        return $this->all();
+    }
+
+
+    public function getWhere($key, $value)
+    {
+        return $this->where($key, $value)->paginate(5);
+    }}
