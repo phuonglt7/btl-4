@@ -1,22 +1,6 @@
-@extends('layouts.app')
+@extends('trashed.layouts')
 
-@section('execute')
-<div class="float-right">
-    @include('layouts.announce')
-</div>
-<h3> QUẢN LÝ TÁC GIẢ </h3>
-<!-- Button to Open the Modal -->
-<button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#myModal">
-  Tạo mới tác giả
-</button>
-<!-- The Modal -->
-<div class="modal" id="myModal">
-    @include('authors.add')
-</div>
-
-<br/>
-
-<table class="table table-bordered data-table">
+@section('content-trashed')
     <thead>
         <th>STT</th>
         <th>Author</th>
@@ -43,9 +27,4 @@
         @endforeach
 
     </tbody>
-
-</table>
-{{ $view->links() }}
-
-@include('authors.edit')
 @endsection

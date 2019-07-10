@@ -14,9 +14,11 @@ class Author extends Model
 
     public $timestamps = true;
 
+    protected $dates = ['deleted_at'];
+
     public function books()
     {
-        return $this->hasMany('app\Book', 'author_id', 'id');
+        return $this->hasMany('App\Book', 'author_id', 'id');
     }
 
     public function getPaginate()
@@ -28,7 +30,6 @@ class Author extends Model
     {
         return $this->all();
     }
-
 
     public function getWhere($key, $value)
     {
