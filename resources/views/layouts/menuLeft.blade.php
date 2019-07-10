@@ -5,16 +5,16 @@
                 <a class="nav-link text-white disabled" href="#">Logo</a>
             </li>
             <li class="nav-item bg-info text-white">
-                <a class="nav-link text-white active" href="#">Sách</a>
+                <a class="nav-link text-white active" href="{{ route('book.index') }}">Sách</a>
             </li>
             <li class="nav-item bg-info text-white">
-                <a class="nav-link text-white" href="#">Tác giả</a>
+                <a class="nav-link text-white" href="{{ route('author.index') }}">Tác giả</a>
             </li>
             <li class="nav-item bg-info text-white">
                 <a class="nav-link text-white" href="#">Tài khoản</a>
             </li>
             <li class="nav-item bg-info text-white">
-                <a class="nav-link text-white" href="#">Thùng Rác</a>
+                <a class="nav-link text-white" href="{{ route('trash-author') }}">Thùng Rác</a>
             </li>
         </ul>
     </div>

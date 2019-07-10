@@ -37,6 +37,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $dates = ['deleted_at'];
+
     public function books()
     {
         return $this->belongsToMany('app\Book', 'borrow_books', 'user_id', 'book_id');

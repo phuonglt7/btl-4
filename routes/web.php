@@ -20,5 +20,7 @@ Auth::routes();
 Route::resource('author', 'AuthorController');
 Route::post('author/update/{id}', 'AuthorController@update');
 Route::resource('book', 'BookController');
+Route::post('book/update/{id}', 'BookController@update');
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/trash-author', 'TrashedController@viewAuthor')->name('trash-author');

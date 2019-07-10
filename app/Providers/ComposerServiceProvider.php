@@ -24,13 +24,18 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         view()->composer(
-            ['authors.index'],
+            ['authors.index', 'books.index', 'books.show'],
             'App\Http\ViewComposers\STTComposer'
         );
 
         view()->composer(
             ['books.index'],
             'App\Http\ViewComposers\StatusBookComposer'
+        );
+
+        view()->composer(
+            ['books.index', 'books.show', 'books.add'],
+            'App\Http\ViewComposers\AuthorComposer'
         );
     }
 }

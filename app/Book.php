@@ -14,14 +14,16 @@ class Book extends Model
 
     public $timestamps = true;
 
+    protected $dates = ['deleted_at'];
+
     public function authors()
     {
-        return $this->belongsTo('app\Author', 'author_id', 'id');
+        return $this->belongsTo('App\Author', 'author_id', 'id');
     }
 
     public function users()
     {
-        return $this->belongsToMany('app\User', 'borrow_books', 'user_id', 'book_id');
+        return $this->belongsToMany('App\User', 'borrow_books', 'user_id', 'book_id');
     }
 
     public function get()
@@ -29,13 +31,13 @@ class Book extends Model
         return $this->all();
     }
 
-    public function get()
+    public function getPaginate()
     {
-        return $this->all();
+        return $this->paginate(5);
     }
-
 
     public function getWhere($key, $value)
     {
         return $this->where($key, $value)->paginate(5);
-    }}
+    }
+}
