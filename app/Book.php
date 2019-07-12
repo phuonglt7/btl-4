@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'books';
 
     protected $fillable = [
@@ -23,21 +26,52 @@ class Book extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\User', 'borrow_books', 'user_id', 'book_id');
+        return $this->belongsToMany(User::class);
     }
 
-    public function get()
+    public function getAll()
     {
         return $this->all();
     }
 
-    public function getPaginate()
+    public function paginateBook()
     {
         return $this->paginate(5);
     }
 
-    public function getWhere($key, $value)
+    public function getWherePaginate($key, $value)
     {
         return $this->where($key, $value)->paginate(5);
+    }
+
+    public function getWhere($key, $value)
+    {
+        return $this->where($key, $value)->get();
+    }
+
+    public function getIdAuthor($id)
+    {
+        return $this->onlyTrashed()->select('author_id')->find($id);
+    }
+
+    public function trashed()
+    {
+        return $this->onlyTrashed()->paginate(5);
+    }
+
+    public function trashedFind($id)
+    {
+        return $this->onlyTrashed()->find($id);
+    }
+
+    public function getWhereTrashed($key, $value)
+    {
+        return $this->onlyTrashed()->where($key, $value)->get();
+    }
+
+
+    public function getWithTrashed()
+    {
+        return $this->withTrashed()->get();
     }
 }

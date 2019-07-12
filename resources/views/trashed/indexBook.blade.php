@@ -2,7 +2,7 @@
 
 @section('content-trashed')
 
- <thead>
+<thead>
     <th>STT</th>
     <th>Tên sách</th>
     <th> Tác giả </th>
@@ -22,10 +22,16 @@
         @endforeach
         <td>
             <div class = "d-flex">
-                <button class='btn btn-info btn-edit mr-4 ml-4'>Sửa</button>
-                <form action="{{route('book.destroy', $item->id) }}" class="submitDelete" method="post" onsubmit="return confirmDeleteAuthor();" >
+                <form action="{{route('trash-book.restore') }}" class="submitDelete" method="post" onsubmit="return confirmRestore();" >
+                    {!! csrf_field() !!}
+                    {{ method_field('PUT') }}
+                    <input type="hidden" name="book_id" value="{{ $item->id }}">
+                    <button type="submit" class="btn btn-info btn-edit mr-4 ml-4">Phục hồi</button>
+                </form>
+                <form action="{{route('trash-book.delete') }}" class="submitDelete" method="post" onsubmit="return confirmDeleteTrashAuthor();" >
                     {!! csrf_field() !!}
                     {{ method_field('DELETE') }}
+                    <input type="hidden" name="book_id" value="{{ $item->id }}">
                     <button type="submit" class="btn btn-danger btn-cancel">Xóa</button>
                 </form>
             </div>

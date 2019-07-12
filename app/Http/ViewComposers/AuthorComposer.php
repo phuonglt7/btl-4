@@ -7,15 +7,9 @@ use App\Author;
 
 class AuthorComposer
 {
-    protected $authors;
-
-    public function __construct(Author $authors){
-        $this->authors = $authors;
-    }
-
     public function compose(View $view)
     {
-        $author = $this->authors->get();
-        $view->with('authorList', $author);
+        $author = Author::all();
+        $view->with('listAuthor', $author);
     }
 }

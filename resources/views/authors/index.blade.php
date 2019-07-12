@@ -4,6 +4,8 @@
 <div class="float-right">
     @include('layouts.announce')
 </div>
+<div class="float-right alert alert-success" >
+</div>
 <h3> QUẢN LÝ TÁC GIẢ </h3>
 <!-- Button to Open the Modal -->
 <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#myModal">

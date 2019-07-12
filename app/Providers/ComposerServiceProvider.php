@@ -6,35 +6,20 @@ use Illuminate\Support\ServiceProvider;
 
 class ComposerServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
     public function register()
     {
-        //
+
     }
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
     public function boot()
     {
         view()->composer(
-            ['authors.index', 'books.index', 'books.show'],
+            ['authors.index', 'books.index', 'books.show', 'trashed.indexAuthor', 'trashed.indexBook', 'users.index', 'borrow.index'],
             'App\Http\ViewComposers\STTComposer'
         );
 
         view()->composer(
-            ['books.index'],
-            'App\Http\ViewComposers\StatusBookComposer'
-        );
-
-        view()->composer(
-            ['books.index', 'books.show', 'books.add'],
+            ['books.index', 'books.show', 'books.add', 'authors.index'],
             'App\Http\ViewComposers\AuthorComposer'
         );
     }

@@ -20,9 +20,8 @@
         var name = $(this).parents("tr").attr('data-name');
 
         $(this).parents("tr").find("td:eq(1)").text(name);
-        $(this).parents("tr").find(".btn-update").remove();
-        $(this).parents("tr").find(".btn-warning").remove();
-        $(this).parents("tr").find(".btn-danger").show();
+        $(".btn-update").remove();
+        $(".btn-warning").remove();
         $(".btn-danger").show();
         $(".btn-edit").show();
     });
@@ -33,18 +32,17 @@
         var id = $(this).parents("tr").attr('data-id');
         var name = $(this).parents("tr").find("input[name='edit_name']").val();
         $.ajax({
-           method:'POST',
-           url:'author/update/'+id,
-           data:{author_name:name},
-           success: (response) => {
+         method:'POST',
+         url:'author/update/'+id,
+         data:{author_name:name},
+         success: (response) => {
             $(this).parents("tr").find("td:eq(1)").text(name);
             $(this).parents("tr").attr('data-name', name);
-            $(this).parents("tr").find(".btn-update").remove();
-            $(this).parents("tr").find(".btn-warning").remove();
-            $(this).parents("tr").find(".btn-danger").show();
+            $(".btn-update").remove();
+            $(".btn-warning").remove();
             $(".btn-danger").show();
             $(".btn-edit").show();
-            console.log(response);
+            $(".alert").html("Sửa thanh cong");
         }
     });
     });

@@ -6,25 +6,30 @@ use Illuminate\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\BookRequest;
+use App\Http\Requests\BookEditRequest;
 use App\Book;
+use App\Author;
 
 class BookController extends Controller
 {
-    protected $books;
+    protected $books, $authors;
 
-    public function __construct(Book $books){
+    public function __construct(Book $books, Author $authors){
         $this->books = $books;
+        $this->authors = $authors;
     }
 
     public function index()
     {
-        $view = $this->books->getPaginate();
-        return view('books.index', compact('view'));
+        $authorList = $this->authors->getAll();
+        $view = $this->books->paginateBook();
+        return view('books.index', compact('view', 'authorList'));
     }
 
     public function show($id){
-        $view = $this->books->getWhere('book_status', $id);
-        return view('books.index', compact('view'));
+        $authorList = $this->authors->getAll();
+        $view = $this->books->getWherePaginate('book_status', $id);
+        return view('books.show', compact('view', 'authorList'));
     }
 
     public function store(BookRequest $request)
@@ -33,11 +38,11 @@ class BookController extends Controller
         return redirect(route('book.index'))->with('status', 'Thêm sách thành công');
     }
 
-
-    public function update(BookRequest $request, $id)
+    public function update(BookEditRequest $request, $id)
     {
-        $author = Book::find($id)->update($request->all());
-        return response()->json($author);
+        $author = Book::findOrFail($id);
+        $update = $author->update($request->all());
+        return response()->json($request->all());
     }
 
     public function destroy($id)

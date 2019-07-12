@@ -1,4 +1,4 @@
- <form id="contactForm" name="contact" role="form" method="post" action="{{ route('author.store') }}">
+ <form id="formAuthor" name="contact" role="form" method="post" action="{{ route('author.store') }}">
     @csrf
     <div class="modal-dialog">
         <div class="modal-content">
@@ -10,7 +10,7 @@
           <div class="modal-body">
             <div class="form-group d-flex">
                 <label>Tác giả:</label>
-                <input type="text" name="author_name" size="30" required="">
+                <input type="text" name="author_name" size="30">
             </div>
         </div>
         <!-- Modal footer -->

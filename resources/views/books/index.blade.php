@@ -1,9 +1,12 @@
-@extends('layouts.app')
+@extends('books.layouts')
 
 @section('execute')
 <div class="float-right">
     @include('layouts.announce')
 </div>
+<div class="float-right alert alert-success">
+</div>
+
 <h3> QUẢN LÝ SÁCH </h3>
 <!-- Button to Open the Modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
@@ -13,6 +16,8 @@
 <div class="modal" id="myModal">
     @include('books.add')
 </div>
+
+
 <ul class="nav nav-tabs float-right">
     <li class="nav-item">
         <a class="nav-link active" href="{{ route('book.index') }}">Tất cả</a>
@@ -42,7 +47,6 @@
     <tr data-id="{{ $item->id }}">
         <td> {{ $i ++}}</td>
         <td> {{ $item->book_name }} </td>
-
         @foreach($authorList as $author)
         @if ($author->id == $item->author_id)
         <td data-author="{{ $author->id }}"> {{ $author->author_name }} </td>

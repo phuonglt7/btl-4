@@ -8,7 +8,6 @@
               <button type="button" class="close" data-dismiss="modal">×</button>
           </div>
           <div class="modal-body">
-            @include('layouts.announce')
             <div class="form-group d-flex">
                 <label>Tên sách: </label>
                 <input type="text" name="book_name" size="30" required="">

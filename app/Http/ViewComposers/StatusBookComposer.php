@@ -6,7 +6,7 @@ use Illuminate\View\View;
 
 class StatusBookComposer
 {
-    public $status=[];
+    public $status = [];
 
     public function __construct()
     {

@@ -3,26 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
+    protected $users;
+
+    public function __construct(User $users){
+        $this->users = $users;
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
         return view('home');
+    }
+
+    public function information()
+    {
+        $view = $this->users->find(Auth::id());
+        return view('auth.information', compact('view'));
+    }
+
+    public function updateInformation(Request $request)
+    {
+        $user = $this->users->find(Auth::id());
+        if ($user->update($request->only('fullname')))
+            return redirect(route('information'))->with('status',
+                'Đổi thông tin tài khoản thành công');
+        else
+            return redirect(route('information'))->with('status',
+                'Đổi thông tin tài khoản không thành công');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect(route('login'));
     }
 }

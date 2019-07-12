@@ -5,10 +5,13 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use SoftDeletes;
+
 
     /**
      * The attributes that are mass assignable.
@@ -41,6 +44,11 @@ class User extends Authenticatable
 
     public function books()
     {
-        return $this->belongsToMany('app\Book', 'borrow_books', 'user_id', 'book_id');
+        return $this->belongsToMany('App\Book');
+    }
+
+    public function paginateUser()
+    {
+        return $this->paginate(5);
     }
 }

@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Author extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'authors';
 
     protected $fillable = [
@@ -26,7 +29,7 @@ class Author extends Model
         return $this->paginate(5);
     }
 
-    public function get()
+    public function getAll()
     {
         return $this->all();
     }
@@ -36,9 +39,24 @@ class Author extends Model
         return $this->where($key, $value)->paginate(5);
     }
 
+
     public function create(array $value)
     {
         return $this->insert($value);
     }
 
+    public function trashed()
+    {
+        return $this->onlyTrashed()->paginate(5);
+    }
+
+    public function trashedFindAuthor($id)
+    {
+        return $this->onlyTrashed()->find($id);
+    }
+
+    public function getWithTrashed()
+    {
+        return $this->withTrashed()->get();
+    }
 }

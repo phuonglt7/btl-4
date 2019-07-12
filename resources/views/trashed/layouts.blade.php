@@ -10,21 +10,16 @@
   Xóa tất cả
 </button>
 <!-- The Modal -->
-<div class="modal" id="myModal">
-    @include('books.add')
-</div>
 <ul class="nav nav-tabs float-right">
     <li class="nav-item">
-        <a class="nav-link active" href="{{ route('book.index') }}">Tác giả</a>
+        <a class="nav-link active" href="{{ route('trash-author') }}">Tác giả</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('book.show',1) }}">Sách</a>
+        <a class="nav-link" href="{{ route('trash-book') }}">Sách</a>
     </li>
 </ul>
 <table class="table table-bordered data-table">
  @yield('content-trashed')
 </table>
 {{ $view->links() }}
-@include('books.edit')
-
 @endsection
