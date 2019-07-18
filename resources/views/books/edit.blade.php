@@ -69,17 +69,16 @@
                 var author_name = tr.find("#author_id :selected").text();
                 var author_id = tr.find("#author_id").val();
                 $.ajax({
-                 method:'POST',
-                 url: "{{ route('book.update.ajax') }}",
-                 data:{id:id, book_name:book_name, author_id:author_id},
-                 success: (response) => {
-                    $(this).parents("tr").find("td:eq(1)").text(book_name);
-                    $(this).parents("tr").find("td:eq(2)").text(author_name);
-                    $(".btn-update").remove();
-                    $(".btn-warning").remove();
-                    $(".btn-danger").show();
-                    $(".btn-edit").show();
-                    setTimeout(function(){
+                    method:'POST',
+                    url: "{{ route('book.update.ajax') }}",
+                    data:{id:id, book_name:book_name, author_id:author_id},
+                    success: (response) => {
+                        $(this).parents("tr").find("td:eq(1)").text(book_name);
+                        $(this).parents("tr").find("td:eq(2)").text(author_name);
+                        $(".btn-update").remove();
+                        $(".btn-warning").remove();
+                        $(".btn-danger").show();
+                        $(".btn-edit").show();
                         if(response.success){
                             $(".alert").addClass('alert-success');
                             $(".alert").html(response.success);
@@ -87,44 +86,42 @@
                          $(".alert").addClass('alert-danger')
                          $(".alert").html(response.error);
                      }
-                 }, 10000);
-                },
-                error: (data) => {
+                 },
+                 error: (data) => {
                     $(".alert").addClass('alert-danger')
                     $(".alert").html(data.responseJSON.errors.book_name+" <br/>"+ data.responseJSON.errors.author_id);
                     setTimeout(function(){ $(".alert").hide();},5000);
                 }
             });
             });
-
         });
         $(".btn-delete").on("click", function() {
             var result = confirm('Bạn có muốn thực hiện xóa');
-        if (result) {
-            var id = $(this).parents("tr").attr('data-id');
-            $.ajax({
-                type: 'post',
-                url: "{{ route('book.destroy.ajax') }}",
-                data: {
-                    id:id
-                },
-                success:(response) => {
-                    if(response.success){
+            if (result) {
+                var id = $(this).parents("tr").attr('data-id');
+                $.ajax({
+                    type: 'post',
+                    url: "{{ route('book.destroy.ajax') }}",
+                    data: {
+                        id:id
+                    },
+                    success:(response) => {
+                        if(response.success){
                          $(this).parents("tr").remove();
-                          $(".alert").addClass('alert-success');
-                            $(".alert").html(response.success);
-                        } else {
+                         $(".alert").addClass('alert-success');
+                         $(".alert").html(response.success);
+                     } else {
                          $(".alert").addClass('alert-danger')
                          $(".alert").html(response.error);
-                    }
-                },
-                error: (data) => {
+                     }
+                 },
+                 error: (data) => {
                     $(".alert").addClass('alert-danger')
                     $(".alert").html(data.responseJSON.errors.book_name+" <br/>"+ data.responseJSON.errors.author_id);
                     setTimeout(function(){ $(".alert").hide();},5000);
                 }
             });
-        }
+            }
         });
 
     });

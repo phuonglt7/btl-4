@@ -43,34 +43,38 @@ class BookController extends Controller
     {
         $view = $this->books->create($request->all());
         if ($view) {
-            return redirect(route('book.index'))->with('status', 'Thêm sách thành công');
+            return response()->json(['success' => 'Thêm sách thành công']);
         } else {
-            return redirect(route('book.index'))->with('status', 'Thêm sách không thành công');
+            return response()->json(['error' => 'Thêm sách không thành công']);
         }
     }
 
     public function destroyAjax(Request $request)
     {
         $book = $this->books->find($request->id);
-        $checkBook = $book->users()->get();
-        if ($checkBook->count() == 0) {
+        if ($book->book_status == DA_MUON_SACH || $book->book_status == DANG_XEM_SACH) {
+            return response()->json(['error' => 'Không được xóa']);
+        } else {
             if ($book->delete()) {
                 return response()->json(['success' => 'Xóa sách thành công']);
             } else {
                 return response()->json(['error' => 'Xóa sách tác giả không thành công']);
             }
-        } else {
-            return response()->json(['error' => 'Sách này đang có người mượn']);
         }
     }
 
     public function updateAjax(BookRequest $request)
     {
-        $book = $this->books->updateBookAjax($request->id, $request->except('id'));
-        if ($book) {
-            return response()->json(['success' => 'Sửa tác giả thành công']);
+        $book = $this->books->find($request->id);
+        if ($book->book_status == DA_MUON_SACH || $book->book_status == DANG_XEM_SACH) {
+            return response()->json(['error' => 'Không được sua']);
         } else {
-            return response()->json(['error' => 'Sửa tác giả không thành công']);
+            $book = $this->books->updateBookAjax($request->id, $request->except('id'));
+            if ($book) {
+                return response()->json(['success' => 'Sửa tác giả thành công']);
+            } else {
+                return response()->json(['error' => 'Sửa tác giả không thành công']);
+            }
         }
     }
 }

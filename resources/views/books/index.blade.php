@@ -19,7 +19,8 @@
         @elseif ($item->book_status == 3)
         <td> Đã mượn </td>
         @endif
-        <td>  @foreach($item->users as $p)
+        <td>
+            @foreach($item->users as $p)
            {{ $p->username}}
            @endforeach
        </td>
