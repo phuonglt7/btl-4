@@ -3,18 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Routing\ResponseFactory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\BookRequest;
 use App\Http\Requests\BookEditRequest;
 use App\Book;
 use App\Author;
+use App\User;
 
 class BookController extends Controller
 {
-    protected $books, $authors;
+    protected $books;
+    protected $authors;
 
-    public function __construct(Book $books, Author $authors){
+    public function __construct(Book $books, Author $authors)
+    {
         $this->books = $books;
         $this->authors = $authors;
     }
@@ -23,33 +27,50 @@ class BookController extends Controller
     {
         $authorList = $this->authors->getAll();
         $view = $this->books->paginateBook();
-        return view('books.index', compact('view', 'authorList'));
+        $page = $view->currentPage();
+        return view('books.index', compact('view', 'authorList', 'page'));
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $authorList = $this->authors->getAll();
         $view = $this->books->getWherePaginate('book_status', $id);
-        return view('books.show', compact('view', 'authorList'));
+        $page = $view->currentPage();
+        return view('books.show', compact('view', 'authorList', 'page'));
     }
 
     public function store(BookRequest $request)
     {
         $view = $this->books->create($request->all());
-        return redirect(route('book.index'))->with('status', 'Thêm sách thành công');
+        if ($view) {
+            return redirect(route('book.index'))->with('status', 'Thêm sách thành công');
+        } else {
+            return redirect(route('book.index'))->with('status', 'Thêm sách không thành công');
+        }
     }
 
-    public function update(BookEditRequest $request, $id)
+    public function destroyAjax(Request $request)
     {
-        $author = Book::findOrFail($id);
-        $update = $author->update($request->all());
-        return response()->json($request->all());
+        $book = $this->books->find($request->id);
+        $checkBook = $book->users()->get();
+        if ($checkBook->count() == 0) {
+            if ($book->delete()) {
+                return response()->json(['success' => 'Xóa sách thành công']);
+            } else {
+                return response()->json(['error' => 'Xóa sách tác giả không thành công']);
+            }
+        } else {
+            return response()->json(['error' => 'Sách này đang có người mượn']);
+        }
     }
 
-    public function destroy($id)
+    public function updateAjax(BookRequest $request)
     {
-        if (Book::find($id)->delete())
-            return redirect(route('author.index'))->with('status', 'Xóa sách thành công');
-        else
-            return redirect(route('author.index'))->with('error', 'Xóa sách tác giả không thành công');
+        $book = $this->books->updateBookAjax($request->id, $request->except('id'));
+        if ($book) {
+            return response()->json(['success' => 'Sửa tác giả thành công']);
+        } else {
+            return response()->json(['error' => 'Sửa tác giả không thành công']);
+        }
     }
 }

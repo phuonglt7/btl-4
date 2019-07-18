@@ -33,17 +33,30 @@
             </tr>
             <tr>
                 <td> Ngày trả: </td>
-                <td><input type="date" name="pay_day" > </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td> </td>
                 <td>
-                    <button class='btn btn-info btn-edit mr-4 ml-4'>Mượn</button>
-                    <button class='btn btn-info btn-edit mr-4 ml-4'>Hủy</button>
-                </td>
-            </tr>
-        </table>
-    </form>
+                    <div class="input-group date" data-provide="datepicker">
+                      <input type="date" class="form-control" name="pay_day">
+                      <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td> </td>
+            <td>
+                <button class='btn btn-info btn-edit mr-4 ml-4'>Mượn</button>
+                <button class='btn btn-info btn-edit mr-4 ml-4'>Hủy</button>
+            </td>
+        </tr>
+    </table>
+</form>
 </div>
+<script>
+    $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+      startDate: '-3d'
+  })
+</script>
 @endsection

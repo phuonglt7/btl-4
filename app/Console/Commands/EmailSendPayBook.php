@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMailPayBook;
-use App\BorrowBook;
+use App\Book;
 use App\User;
 
 class EmailSendPayBook extends Command
@@ -31,12 +31,14 @@ class EmailSendPayBook extends Command
 
     public function handle()
     {
-        $find = BorrowBook::whereRaw('Date(pay_day) < CURDATE()')
-            ->where('borrow_status', 1)->get();
-        foreach ($find as $user)
-        {
-            $user = User::find($user->user_id);
-            Mail::to($user->email)->send(new SendMailPayBook());
+        $getBook = Book::where('book_status', DA_MUON_SACH)->with('bookUser')->get();
+        foreach ($getBook as $book) {
+            if (date('Y-m-d') > $book->bookUser['pay_day']) {
+                $user = User::find($book->bookUser['user_id']);
+                $user_book = $user->books()->first();
+                Mail::to($user->email)->send(new SendMailPayBook($user_book));
+                Mail::to("admin@gmail.com")->send(new SendMailPayBook($user_book));
+            }
         }
     }
 }

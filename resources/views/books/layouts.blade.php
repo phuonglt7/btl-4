@@ -4,7 +4,7 @@
 <div class="float-right">
     @include('layouts.announce')
 </div>
-<div class="float-right alert alert-success" >
+<div class="float-right alert">
 </div>
 <h3> QUẢN LÝ SÁCH </h3>
 <!-- Button to Open the Modal -->
@@ -17,16 +17,16 @@
 </div>
 <ul class="nav nav-tabs float-right">
     <li class="nav-item">
-        <a class="nav-link active" href="{{ route('book.index') }}">Tất cả</a>
+        <a class="nav-link {{ (\Request::route()->getName() == 'book.index') ? 'active' : '' }}" href="{{ route('book.index') }}">Tất cả</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('book.show',1) }}">Chưa mượn</a>
+        <a class="nav-link {{ strpos(\Request::url(), 'book/1') ? 'active' : '' }}" href="{{ route('book.show', CHUA_MUON_SACH) }}">Chưa mượn</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('book.show',2) }}">Đang xem</a>
+        <a class="nav-link {{ strpos(\Request::url(),'book/2') ? 'active' : '' }}" href="{{ route('book.show', DANG_XEM_SACH) }}">Đang xem</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('book.show',3) }}">Đã mượn</a>
+        <a class="nav-link {{ strpos(\Request::url(), 'book/3') ? 'active' : '' }}" href="{{ route('book.show', DA_MUON_SACH) }}">Đã mượn</a>
     </li>
 </ul>
 <table class="table table-bordered data-table">
@@ -40,4 +40,8 @@
 </thead>
 
 @yield('content-book')
+</table>
+{{ $view->links() }}
+@include('books.edit')
+
 @endsection

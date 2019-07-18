@@ -14,9 +14,9 @@
 
 </thead>
 <tbody>
-    @foreach($view as $item)
+    @foreach($view as $key => $item)
     <tr>
-        <td> {{ $i ++}}</td>
+        <td> {{ $key + 1 + PAGE * ($page - 1)}} </td>
         <td> {{ $item->book_name }} </td>
         @foreach($authorList as $author)
         @if ($author->id == $item->author_id)

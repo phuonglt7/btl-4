@@ -7,6 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Book;
 
 class UpdateStatusBook implements ShouldQueue
 {
@@ -17,7 +18,7 @@ class UpdateStatusBook implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Book $book)
+    public function __construct($book)
     {
         $this->book = $book;
     }
@@ -29,7 +30,6 @@ class UpdateStatusBook implements ShouldQueue
      */
     public function handle()
     {
-        sleep(5);
         Book::find($this->book)->update(['book_status' => 1]);
     }
 }

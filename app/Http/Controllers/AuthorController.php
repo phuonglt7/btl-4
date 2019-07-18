@@ -12,41 +12,56 @@ use App\Http\Requests\AuthorRequest;
 
 class AuthorController extends Controller
 {
+    protected $books;
     protected $authors;
 
-    public function __construct(Author $authors){
+    public function __construct(Book $books, Author $authors)
+    {
+        $this->books = $books;
         $this->authors = $authors;
     }
 
     public function index()
     {
-         $view = $this->authors->getPaginate();
-        return view('authors.index', compact('view'));
+        $view = $this->authors->getPaginate();
+        $page = $view->currentPage();
+        return view('authors.index', compact('view', 'page'));
     }
 
     public function store(AuthorRequest $request)
     {
         $author = $this->authors->create($request->all());
-        return redirect(route('author.index'))->with('status', "Thêm tác giả thành công");
-    }
-
-    public function update(AuthorRequest $request, $id)
-    {
-        $author = Author::find($id)->update($request->all());
-        return response()->json("Succsess");
-    }
-
-    public function destroy($id)
-    {
-        $findAuthor = Author::findOrFail($id);
-        foreach ($findAuthor->books as $book)
-        {
-            Book::find($book['id'])->delete();
+        if ($author) {
+            return response()->json(['success'=>"Thêm tác giả thành công"]);
+        } else {
+            return response()->json(['error' => "Thêm tác giả không thành công"]);
         }
-        if ($findAuthor->delete())
-            return redirect(route('author.index'))->with('status', 'Xóa tác giả thành công');
-        else
-            return redirect(route('author.index'))->with('error', 'Xóa tác giả không thành công');
+    }
 
+    public function updateAjax(AuthorRequest $request)
+    {
+        $author = Author::find($request->id)->update($request->only('author_name'));
+        if ($author) {
+            return response()->json(['success'=>'Sửa tác giả thành công']);
+        } else {
+            return response()->json(['error'=>'Sửa tác giả không thành công']);
+        }
+    }
+
+    public function destroyAjax(Request $request)
+    {
+        $findBook = $this->books->where('author_id', $request->id)->get();
+        foreach ($findBook as $book) {
+            $checkBook = $this->books->find($book->id)->users()->get();
+            if ($checkBook->count() > 0) {
+                return response()->json(['error' => 'Sách tác giả này đã có người mượn']);
+                break;
+            }
+        }
+        if ($this->authors->deleteAuthor($request->id)) {
+            return response()->json(['success' => 'Xóa tác giả thành công']);
+        } else {
+            return response()->json(['error' => 'Xóa tác giả không thành công']);
+        }
     }
 }

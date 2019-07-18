@@ -26,7 +26,12 @@ class Book extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany('App\User', 'book_user')->withPivot('borrow_day', 'pay_day');
+    }
+
+    public function bookUser()
+    {
+        return $this->hasOne('App\BookUser', 'book_id', 'id');
     }
 
     public function getAll()
@@ -54,6 +59,21 @@ class Book extends Model
         return $this->onlyTrashed()->select('author_id')->find($id);
     }
 
+    public function updateBook($id, array $attributes)
+    {
+        $result = $this->find($id);
+        if ($result) {
+            $result->update($attributes);
+            return $result;
+        }
+        return false;
+    }
+
+    public function updateBookAjax($id, array $value)
+    {
+        return $this->find($id)->update($value);
+    }
+
     public function trashed()
     {
         return $this->onlyTrashed()->paginate(5);
@@ -61,7 +81,7 @@ class Book extends Model
 
     public function trashedFind($id)
     {
-        return $this->onlyTrashed()->find($id);
+        return $this->withTrashed()->find($id);
     }
 
     public function getWhereTrashed($key, $value)
@@ -69,9 +89,8 @@ class Book extends Model
         return $this->onlyTrashed()->where($key, $value)->get();
     }
 
-
     public function getWithTrashed()
     {
-        return $this->withTrashed()->get();
+        return $this->withTrashed()->first();
     }
 }

@@ -6,23 +6,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Book;
 use App\Author;
-use App\BorrowBook;
 use App\User;
 
 class PayController extends Controller
 {
-    protected $books, $authors, $borrow;
+    protected $books;
+    protected $authors;
 
-    public function __construct(Book $books, Author $authors, BorrowBook $borrow){
+    public function __construct(Book $books, Author $authors)
+    {
         $this->books = $books;
         $this->authors = $authors;
-        $this->borrow = $borrow;
     }
 
     public function index()
     {
         $book = $this->books->all();
-        $view = User::find(Auth::id());
+        $view = User::find(Auth::id())->books()->get();
         return view('pay.index', compact('view', 'book'));
     }
 
@@ -30,13 +30,13 @@ class PayController extends Controller
     {
         $deleteBorrow = User::find(Auth::id())->books()
                             ->detach($request->book_id);
-        Book::find($request->book_id)->update('book_status', 1);
-        if ($deleteBorrow)
+        Book::find($request->book_id)->update(['book_status' => 1]);
+        if ($deleteBorrow) {
             return redirect(route('pay.index'))
-                        ->with('status', 'Sách phục hồi thành công');
-        else
+                        ->with('status', 'Trả sách thành công');
+        } else {
             return redirect(route('pay.index'))
-                        ->with('error', 'Sách phục hồi không thành công');
+                        ->with('error', 'Trả sách thành công');
+        }
     }
 }
-

@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Carbon\Carbon;
 
-class BorrowRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +24,7 @@ class BorrowRequest extends FormRequest
     public function rules()
     {
         return [
-            'pay_day' => 'required|date',
+            'fullname' => 'required|max:100'
         ];
     }
 }

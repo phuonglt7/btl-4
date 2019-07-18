@@ -24,8 +24,6 @@
             <td></td>
             <td> </td>
             <td>
-                <button class='btn btn-info btn-edit mr-4 ml-4'>Mượn</button>
-                <button class='btn btn-info btn-edit mr-4 ml-4'>Hủy</button>
            </td>
        </tr>
    </table>

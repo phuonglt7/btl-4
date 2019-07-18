@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('execute')
-<div class="float-right">
+<div class="float-right" s>
     @include('layouts.announce')
 </div>
-<div class="float-right alert alert-success" >
+<div class="float-right alert">
 </div>
 <h3> QUẢN LÝ TÁC GIẢ </h3>
 <!-- Button to Open the Modal -->
@@ -15,9 +15,7 @@
 <div class="modal" id="myModal">
     @include('authors.add')
 </div>
-
 <br/>
-
 <table class="table table-bordered data-table">
     <thead>
         <th>STT</th>
@@ -27,24 +25,20 @@
     </thead>
 
     <tbody>
-        @foreach($view as $item)
-        <tr data-id="{{ $item->id }}" data-name="{{ $item->author_name }}" >
-            <td> {{ $i ++}}</td>
-            <td> {{ $item->author_name }} </td>
+        @foreach($view as $key => $item)
+        <tr data-id="{{ $item->id }}">
+            <td> {{ $key + 1 + PAGE * ($page - 1)}}</td>
+            <td  data-name="{{ $item->author_name }}" > {{ $item->author_name }} </td>
             <td>
                 <div class = "d-flex">
-                    <button class='btn btn-info btn-edit mr-4 ml-4'>Sửa</button>
-                    <form action="{{route('author.destroy', $item->id) }}" class="submitDelete" method="post" onsubmit="return confirmDeleteAuthor();" >
-                        {!! csrf_field() !!}
-                        {{ method_field('DELETE') }}
-                        <button type="submit" class="btn btn-danger btn-cancel">Xóa</button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-        @endforeach
+                   <button class='btn btn-info btn-edit mr-4 ml-4'>Sửa</button> 
+                   <button class="btn btn-danger btn-delete" >Xóa</button>
+               </div>
+           </td>
+       </tr>
+       @endforeach
 
-    </tbody>
+   </tbody>
 
 </table>
 {{ $view->links() }}

@@ -4,54 +4,38 @@
 <div class="float-right">
     @include('layouts.announce')
 </div>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Thông tin tài khoản') }}</div>
+<div class="float-right alert alert-success" >
+</div>
+<h3> QUẢN LÝ TÀI KHOẢN</h3>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('post-information') }}">
-                        @csrf
-                        <div class="form-group row">
-                            <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Username') }}</label>
+<br/>
 
-                            <div class="col-md-6">
-                                <input id="username" type="text" class="form-control" name="username" value="{{ $view->username }}" readonly>
+<table class="table table-bordered data-table">
+    <thead>
+        <th>username</th>
+        <th>full-name </th>
+        <th>email</th>
+        <th width="200px">Action</th>
 
-                            </div>
-                        </div>
+    </thead>
 
-                        <div class="form-group row">
-                            <label for="fullname" class="col-md-4 col-form-label text-md-right">{{ __('fullname') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="fullname" type="text" class="form-control @error('fullname') is-invalid @enderror" name="fullname" value="{{ $view->fullname }}" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $view->email }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Sửa thông tin') }}
-                                </button>
-                            </div>
-                        </div>
+    <tbody>
+        <tr data-id="{{ Auth::id() }}">
+            <td>{{ $view->username }}</td>
+            <td>{{ $view->fullname }} </td>
+            <td>{{ $view->email }}</td>
+            <td>
+                <div class = "d-flex">
+                    <button class='btn btn-info btn-edit ml-4 mr-4'>Sửa</button>
+                    <form  class="submitDelete" method="post" onsubmit="return confirmDeleteAuthor();" >
+                        {!! csrf_field() !!}
+                        {{ method_field('DELETE') }}
+                        <button type="submit" class="btn btn-danger btn-cancel">Xóa</button>
                     </form>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+            </td>
+        </tr>
+    </tbody>
+
+</table>
 @endsection
-
-
-

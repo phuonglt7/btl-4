@@ -10,9 +10,9 @@
 
 </thead>
 <tbody>
-    @foreach($view as $item)
+    @foreach($view as $key => $item)
     <tr data-id="{{ $item->id }}">
-        <td> {{ $i ++}}</td>
+        <td> {{ $key + 1 + PAGE * ($page - 1)}} </td>
         <td> {{ $item->book_name }} </td>
 
         @foreach($authorList as $author)

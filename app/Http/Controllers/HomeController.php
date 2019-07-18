@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\UserRequest;
 
 class HomeController extends Controller
 {
     protected $users;
 
-    public function __construct(User $users){
+    public function __construct(User $users)
+    {
         $this->users = $users;
     }
 
@@ -25,15 +27,14 @@ class HomeController extends Controller
         return view('auth.information', compact('view'));
     }
 
-    public function updateInformation(Request $request)
+    public function updateInformation(UserRequest $request)
     {
         $user = $this->users->find(Auth::id());
-        if ($user->update($request->only('fullname')))
-            return redirect(route('information'))->with('status',
-                'Đổi thông tin tài khoản thành công');
-        else
-            return redirect(route('information'))->with('status',
-                'Đổi thông tin tài khoản không thành công');
+        if ($user->update($request->only('fullname'))) {
+            return redirect(route('book.index'))->with('status', 'Đổi thông tin tài khoản thành công');
+        } else {
+            return redirect(route('book.index'))->with('status', 'Đổi thông tin tài khoản không thành công');
+        }
     }
 
     public function logout()

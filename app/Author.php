@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Book;
 
 class Author extends Model
 {
@@ -39,7 +40,14 @@ class Author extends Model
         return $this->where($key, $value)->paginate(5);
     }
 
-
+    public function deleteAuthor($id)
+    {
+        $getBook =  Book::where('author_id', $id)->get();
+        foreach ($getBook as $book) {
+            Book::find($book->id)->delete();
+        }
+        return $this->find($id)->delete();
+    }
     public function create(array $value)
     {
         return $this->insert($value);

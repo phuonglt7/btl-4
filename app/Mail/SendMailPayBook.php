@@ -6,18 +6,17 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\User;
 
 class SendMailPayBook extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected $user_book;
+
+    public function __construct($user_book)
     {
+        $this->user_book = $user_book;
     }
 
     /**
@@ -27,6 +26,10 @@ class SendMailPayBook extends Mailable
      */
     public function build()
     {
-        return $this->view('mails.payBook');
+        $book = $this->user_book;
+
+        $user = User::find($book->pivot->user_id);
+
+        return $this->view('mails.payBook', compact('book', 'user'));
     }
 }

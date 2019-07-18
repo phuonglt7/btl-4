@@ -12,10 +12,10 @@
 <!-- The Modal -->
 <ul class="nav nav-tabs float-right">
     <li class="nav-item">
-        <a class="nav-link active" href="{{ route('trash-author') }}">Tác giả</a>
+        <a class="nav-link {{ (\Request::route()->getName() == 'trash-author') ? 'active' : '' }}" href="{{ route('trash-author') }}">Tác giả</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('trash-book') }}">Sách</a>
+        <a class="nav-link {{ (\Request::route()->getName() == 'trash-book') ? 'active' : '' }}" href="{{ route('trash-book') }}">Sách</a>
     </li>
 </ul>
 <table class="table table-bordered data-table">

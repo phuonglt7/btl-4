@@ -14,13 +14,19 @@ Route::group(['middleware'=>['auth']], function(){
 
 
     Route::group(['middleware'=>['checkPermission']], function(){
-        Route::resource('author', 'AuthorController')->except(['create', 'edit']);
 
-        Route::post('author/update/{id}', 'AuthorController@update');
+        Route::resource('author', 'AuthorController')->only(['index', 'store']);
 
-        Route::resource('book', 'BookController');
+        Route::post('author/update-ajax', 'AuthorController@updateAjax')->name('author.update.ajax');
 
-        Route::post('book/update/{id}', 'BookController@update');
+        Route::post('author/destroyAjax', 'AuthorController@destroyAjax')->name('author.destroy.ajax');
+
+        Route::resource('book', 'BookController')->only(['index', 'show', 'store']);
+
+        Route::post('book/destroyAjax', 'BookController@destroyAjax')->name('book.destroy.ajax');
+
+
+        Route::post('book/update-ajax', 'BookController@updateAjax')->name('book.update.ajax');
 
         Route::get('/trash-author', 'TrashedController@viewAuthor')->name('trash-author');
 

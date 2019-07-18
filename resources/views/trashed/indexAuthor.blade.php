@@ -9,9 +9,9 @@
 </thead>
 
 <tbody>
-    @foreach($view as $item)
+    @foreach($view as $key => $item)
     <tr data-id="{{ $item->id }}" data-name="{{ $item->author_name }}" >
-        <td> {{ $i ++}}</td>
+        <td> {{ $key + 1 + PAGE * ($page - 1)}} </td>
         <td> {{ $item->author_name }} </td>
         <td>
             <div class = "d-flex">
