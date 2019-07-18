@@ -6,8 +6,9 @@
 </div>
 
 <h3> MƯỢN SÁCH </h3>
-<div class="col-md-3 border border-warning p-2"><a href="{{ route('borrow.index') }}" class ="p-2"> Sách </a> >>  Mượn Sách</div>
-<div class = "m-5 ">
+<div class="col-md-3 border border-warning "><a href="{{ route('borrow.index') }}" class ="p-2"> Sách </a> >>  {{ $view->book_name }}</div>
+<br/>
+<br/>
     <form action ="{{ route('borrow.store') }}" method="post">
         @csrf
         <table width="400px">
@@ -26,6 +27,7 @@
                 <td data-author="{{ $author->id }}"> {{ $author->author_name }} </td>
                 @endif
                 @endforeach
+                <td></td>
             </tr>
             <tr>
                 <td> Ngày mượn: </td>
@@ -41,6 +43,7 @@
                     </div>
                 </div>
             </td>
+            <td></td>
         </tr>
         <tr>
             <td></td>
@@ -52,7 +55,6 @@
         </tr>
     </table>
 </form>
-</div>
 <script>
     $('.datepicker').datepicker({
         format: 'dd/mm/yyyy',

@@ -31,9 +31,9 @@ class HomeController extends Controller
     {
         $user = $this->users->find(Auth::id());
         if ($user->update($request->only('fullname'))) {
-            return redirect(route('book.index'))->with('status', 'Đổi thông tin tài khoản thành công');
+              return response()->json(['success' => 'Sửa thông tin thành công']);
         } else {
-            return redirect(route('book.index'))->with('status', 'Đổi thông tin tài khoản không thành công');
+            return response()->json(['error' => 'sửa thông tin không thành công']);
         }
     }
 

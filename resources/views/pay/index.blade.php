@@ -6,7 +6,7 @@
 </div>
 
 <h3> TRẢ SÁCH </h3>
-<div class = "ml-5">
+<div >
     <table width="400px">
         @foreach($view as $user)
         <tr>
