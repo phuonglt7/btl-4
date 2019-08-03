@@ -1,37 +1,37 @@
-@extends('books.layouts')
+@extends('layouts.app')
 
-@section('content-book')
-<tbody>
-    @foreach($view as $key=>$item)
-    <tr data-id="{{ $item->id }}">
-        <td> {{ $key + 1 + PAGE * ($page - 1)}} </td>
-        <td> {{ $item->book_name }} </td>
-        @foreach($authorList as $author)
-        @if ($author->id == $item->author_id)
-        <td data-author="{{ $item->author_id }}"> {{ $author->author_name }} </td>
-        @endif
-        @endforeach
+@section('execute')
+<div class="float-right">
+    @include('layouts.announce')
+</div>
+<div class="float-right alert">
+</div>
+<h3> QUẢN LÝ SÁCH </h3>
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  Tạo mới sách
+</button>
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    @include('books.add')
+</div>
+<ul class="nav nav-tabs float-right">
+    <li class="nav-item">
+        <a class="nav-link list-book " data-href="{{ route('book.page') }}" data-url="book">Tất cả</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link list-book " data-href="{{ route('list-book-none', CHUA_MUON_SACH) }}" data-url="list-book-none">Chưa mượn</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link list-book" data-href="{{ route('list-book-view', DANG_XEM_SACH) }}" data-url="list-book-view">Đang xem</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link list-book" data-href="{{ route('list-book-borrow') }}" data-url="list-book-borrow">Đã mượn</a>
+    </li>
+</ul>
+<div id= "book">
+@include('books.table')
+</div>
 
-        @if ($item->book_status == 1)
-        <td> Chưa mượn </td>
-        @elseif($item->book_status == 2)
-        <td> Đang xem </td>
-        @elseif ($item->book_status == 3)
-        <td> Đã mượn </td>
-        @endif
-        <td>
-            @foreach($item->users as $p)
-           {{ $p->username}}
-           @endforeach
-       </td>
 
-       <td>
-        <div class = "d-flex">
-            <button class='btn btn-info btn-edit mr-4 ml-4'>Sửa</button>
-                <button type="submit" class="btn btn-danger btn-delete">Xóa</button>
-        </div>
-    </td>
-</tr>
-@endforeach
-</tbody>
 @endsection

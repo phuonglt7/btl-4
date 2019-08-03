@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Repositories\Users\UserRepositoryInterface;
 
 class UserController extends Controller
 {
     protected $users;
 
-    public function __construct(User $users)
+    public function __construct(UserRepositoryInterface $users)
     {
         $this->users = $users;
     }

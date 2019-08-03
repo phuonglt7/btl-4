@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\BorrowRequest;
 use Carbon\Carbon;
-use App\Book;
-use App\Author;
-use App\User;
+use App\Repositories\Authors\AuthorRepositoryInterface;
+use App\Repositories\Books\BookRepositoryInterface;
+use App\Repositories\Users\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use App\Jobs\UpdateStatusBook;
 
@@ -17,7 +17,7 @@ class BorrowController extends Controller
     protected $authors;
     protected $users;
 
-    public function __construct(Book $books, Author $authors, User $users)
+    public function __construct(BookRepositoryInterface $books, AuthorRepositoryInterface $authors, UserRepositoryInterface $users)
     {
         $this->books = $books;
         $this->authors = $authors;
@@ -27,7 +27,7 @@ class BorrowController extends Controller
 
     public function index()
     {
-        $authorList = $this->authors->all();
+        $authorList = $this->authors->getAll();
         $view = $this->books->getWherePaginate('book_status', CHUA_MUON_SACH);
         $page = $view->currentPage();
         return view('borrow.index', compact('view', 'authorList', 'page'));
@@ -62,7 +62,7 @@ class BorrowController extends Controller
                             'pay_day' => $request->pay_day
                         ]
                     );
-                    $this->books->updateBook($request->book_id, ['book_status' => 3]);
+                    $this->books->update($request->book_id, ['book_status' => 3]);
                     return redirect(route('borrow.index'))->with('status', 'Mượn thành công');
                 } else {
                     return redirect(route('borrow.index'))->with('error', 'Bạn chưa trả sách');

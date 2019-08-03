@@ -17,7 +17,7 @@
 </div>
 <ul class="nav nav-tabs float-right">
     <li class="nav-item">
-        <a class="nav-link {{ (\Request::route()->getName() == 'book.index') ? 'active' : '' }}" href="{{ route('book.index') }}">Tất cả</a>
+        <a class="nav-link {{ (\Request::route()->getName() == 'book.index') ? 'active' : '' }}" href="{{ route('book.page') }}">Tất cả</a>
     </li>
     <li class="nav-item">
         <a class="nav-link {{ strpos(\Request::url(), 'book/1') ? 'active' : '' }}" href="{{ route('book.show', CHUA_MUON_SACH) }}">Chưa mượn</a>
@@ -29,19 +29,7 @@
         <a class="nav-link {{ strpos(\Request::url(), 'book/3') ? 'active' : '' }}" href="{{ route('book.show', DA_MUON_SACH) }}">Đã mượn</a>
     </li>
 </ul>
-<table class="table table-bordered data-table">
- <thead>
-    <th>STT</th>
-    <th>Tên sách</th>
-    <th> Tác giả </th>
-    <th> Trạng thái </th>
-    <th> Người mượn </th>
-    <th width="200px">Action</th>
-</thead>
-
-@yield('content-book')
-</table>
-{{ $view->links() }}
-@include('books.edit')
+@include('books.index')
+@include('books.ajax')
 
 @endsection

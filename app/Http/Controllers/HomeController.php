@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserRequest;
+use App\Repositories\Users\UserRepositoryInterface;
 
 class HomeController extends Controller
 {
     protected $users;
 
-    public function __construct(User $users)
+    public function __construct(UserRepositoryInterface $users)
     {
         $this->users = $users;
     }

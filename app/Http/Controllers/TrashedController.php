@@ -4,82 +4,90 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Author;
-use App\Book;
+use App\Repositories\Books\BookRepositoryInterface;
+use App\Repositories\Authors\AuthorRepositoryInterface;
 
 class TrashedController extends Controller
 {
     protected $books;
     protected $authors;
 
-    public function __construct(Book $books, Author $authors)
+    public function __construct(BookRepositoryInterface $books, AuthorRepositoryInterface $authors)
     {
         $this->books = $books;
         $this->authors = $authors;
     }
 
-    public function viewAuthor()
+    public function viewAuthor(Request $request)
     {
         $view = $this->authors->trashed();
         $page = $view->currentPage();
-        return view('trashed.indexAuthor', compact('view', 'page'));
+        $status ="author";
+        if ($request->ajax()) {
+            return view('trashed.indexAuthor', compact('view', 'page', 'status'));
+        }
+        return view('trashed.layouts', compact( 'view', 'page', 'status'));
     }
 
-    public function viewBook()
+    public function viewBook(Request $request)
     {
         $authorList = $this->authors->getWithTrashed();
-        $view = $this->books->trashed();
-        $page = $view->currentPage();
-        return view('trashed.indexBook', compact('view', 'authorList', 'page'));
+        $viewBook= $this->books->trashed();
+        $page = $viewBook->currentPage();
+        $status="book";
+        if ($request->ajax()) {
+            return view('trashed.indexBook', compact('viewBook', 'authorList', 'page', 'status'));
+        }
+        return view('trashed.layouts', compact('viewBook', 'authorList', 'page', 'status'));
     }
 
     public function restoreBook(Request $request)
     {
-        $book_id = $this->books->getIdAuthor($request->input('book_id'));
+        $book_id = $this->books->getIdAuthor($request->id);
         $countAuthor = $this->authors->find($book_id);
         if ($countAuthor->count()) {
-            $book = $this->books->trashedFind($request->input('book_id'));
+            $book = $this->books->trashedFind($request->id);
             if ($book->restore()) {
-                return redirect(route('trash-book'))->with('status', 'Sách phục hồi thành công');
+                return response()->json(['success' =>'Sách phục hồi thành công']);
             } else {
-                return redirect(route('trash-book'))->with('error', 'Sách phục hồi không thành công');
+                return response()->json(['error' => 'Sách phục hồi không thành công']);
             }
         } else {
-            return redirect(route('trash-book'))->with('error', 'Tác gỉa sách không tồn tại');
+            return response()->json(['error' => 'Tác gỉa sách không tồn tại']);
         }
     }
 
     public function restoreAuthor(Request $request)
     {
-        $author = $this->authors->trashedFindAuthor($request->input('author_id'));
+        $author = $this->authors->trashedFindAuthor($request->id);
         if ($author->restore()) {
-            return redirect(route('trash-author'))->with('status', 'Tác gỉa phục hồi thành công');
+            return response()->json(['success' => 'Tác gỉa phục hồi thành công']);
         } else {
-            return redirect(route('trash-author'))->with('status', 'Tác gỉa phục hồi không thành công');
+            return response()->json(['error' => 'Tác gỉa phục hồi không thành công']);
         }
     }
 
     public function deleteAuthor(Request $request)
     {
-        $author = $this->authors->trashedFindAuthor($request->input('author_id'));
+        $author = $this->authors->trashedFindAuthor($request->id);
         $databook = $this->books
-                        ->getWhereTrashed('author_id', $request->input('author_id'));
+        ->getWhereTrashed('author_id', $request->id);
         foreach ($databook as $book) {
-            $this->books->trashedFind($book->id)->forceDelete();
+            $this->books->deleteForce($book->id);
         }
-        if ($author->forceDelete()) {
-            return redirect(route('trash-author'))->with('status', 'Xóa tác giả thành công');
+        if ($this->authors->deleteForce($request->id)) {
+            return response()->json(['success' => 'Xóa tác giả thành công']);
         } else {
-            return redirect(route('trash-author'))->with('error', 'Xóa tác giả không thành công');
+            return response()->json(['error' => 'Xóa tác giả không thành công']);
         }
     }
 
     public function deleteBook(Request $request)
     {
-        $book = Book::withTrashed()->find($request->input('book_id'));
-        if ($book->forceDelete()) {
-            return redirect(route('trash-author'))->with('status', 'Sách xóa thành công');
+        if ($this->books->deleteForce($request->id)) {
+            return response()->json(['success' => 'Sách xóa thành công']);
         } else {
-            return redirect(route('trash-author'))->with('error', 'Sách xóa không thành công');
+            return response()->json(['error' => 'Sách xóa không thành công']);
         }
     }
 }
