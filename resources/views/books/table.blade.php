@@ -1,6 +1,12 @@
-@extends('books.layouts')
-
-@section('content-book')
+<table class="table table-bordered data-table">
+   <thead>
+    <th>STT</th>
+    <th>Tên sách</th>
+    <th> Tác giả </th>
+    <th> Trạng thái </th>
+    <th> Người mượn </th>
+    <th width="200px">Action</th>
+</thead>
 <tbody>
     @foreach($view as $key=>$item)
     <tr data-id="{{ $item->id }}">
@@ -21,17 +27,19 @@
         @endif
         <td>
             @foreach($item->users as $p)
-           {{ $p->username}}
-           @endforeach
-       </td>
+            {{ $p->username}}
+            @endforeach
+        </td>
 
-       <td>
-        <div class = "d-flex">
-            <button class='btn btn-info btn-edit mr-4 ml-4'>Sửa</button>
+        <td>
+            <div class = "d-flex">
+                <button class='btn btn-info btn-edit mr-4 ml-4'>Sửa</button>
                 <button type="submit" class="btn btn-danger btn-delete">Xóa</button>
-        </div>
-    </td>
-</tr>
-@endforeach
+            </div>
+        </td>
+    </tr>
+    @endforeach
 </tbody>
-@endsection
+</table>
+{{ $view->links() }}
+@include('books.edit')

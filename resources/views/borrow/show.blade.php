@@ -22,7 +22,7 @@
     </tr>
     <tr>
         <td>
-            <a href="{{ route('borrow.edit', $item->id) }}">
+            <a href="{{ route('borrow.edit', $view->id) }}">
                 <button class='btn btn-info btn-edit mr-4 ml-4'>MƯỢN SÁCH</button>
             </a>
         </td>

@@ -6,8 +6,8 @@ use Illuminate\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Author;
-use App\Book;
+use App\Repositories\Books\BookRepositoryInterface;
+use App\Repositories\Authors\AuthorRepositoryInterface;
 use App\Http\Requests\AuthorRequest;
 
 class AuthorController extends Controller
@@ -15,7 +15,7 @@ class AuthorController extends Controller
     protected $books;
     protected $authors;
 
-    public function __construct(Book $books, Author $authors)
+    public function __construct(BookRepositoryInterface $books, AuthorRepositoryInterface $authors)
     {
         $this->books = $books;
         $this->authors = $authors;
@@ -25,6 +25,16 @@ class AuthorController extends Controller
     {
         $view = $this->authors->getPaginate();
         $page = $view->currentPage();
+        return view('authors.index', compact('view', 'page'));
+    }
+
+    public function indexPagenate(Request $request)
+    {
+        $view = $this->authors->getPaginate();
+        $page = $view->currentPage();
+        if ($request->ajax()) {
+            return view('authors.table', compact('view', 'page'));
+        }
         return view('authors.index', compact('view', 'page'));
     }
 
@@ -40,7 +50,7 @@ class AuthorController extends Controller
 
     public function updateAjax(AuthorRequest $request)
     {
-        $author = Author::find($request->id)->update($request->only('author_name'));
+        $author = $this->authors->update($request->id, $request->only('author_name'));
         if ($author) {
             return response()->json(['success'=>'Sửa tác giả thành công']);
         } else {
@@ -48,9 +58,17 @@ class AuthorController extends Controller
         }
     }
 
+    public function deleteBook($id)
+    {
+        $getBook =  $this->books->getWhere('author_id', $id);
+        foreach ($getBook as $book) {
+            $this->books->delete($book->id);
+        }
+    }
+
     public function destroyAjax(Request $request)
     {
-        $findBook = $this->books->where('author_id', $request->id)->get();
+        $findBook = $this->books->getWhere('author_id', $request->id);
         foreach ($findBook as $book) {
             $checkBook = $this->books->find($book->id)->users()->get();
             if ($checkBook->count() > 0) {
@@ -58,7 +76,8 @@ class AuthorController extends Controller
                 break;
             }
         }
-        if ($this->authors->deleteAuthor($request->id)) {
+        $this->deleteBook($request->id);
+        if ($this->authors->delete($request->id)) {
             return response()->json(['success' => 'Xóa tác giả thành công']);
         } else {
             return response()->json(['error' => 'Xóa tác giả không thành công']);

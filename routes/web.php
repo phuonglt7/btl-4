@@ -15,30 +15,41 @@ Route::group(['middleware'=>['auth']], function(){
 
     Route::group(['middleware'=>['checkPermission']], function(){
 
-        Route::resource('author', 'AuthorController')->only(['index', 'store']);
+        Route::get('author', 'AuthorController@indexPagenate')->name('author.page');
+
+        Route::post('author/store', 'AuthorController@store')->name('author.store');
 
         Route::post('author/update-ajax', 'AuthorController@updateAjax')->name('author.update.ajax');
 
         Route::post('author/destroyAjax', 'AuthorController@destroyAjax')->name('author.destroy.ajax');
 
-        Route::resource('book', 'BookController')->only(['index', 'show', 'store']);
+        Route::resource('book', 'BookController')->only(['show', 'store']);
 
-        Route::post('book/destroyAjax', 'BookController@destroyAjax')->name('book.destroy.ajax');
+        Route::get('book/', 'BookController@index')->name('book.page');
 
+        Route::get('list-book-none', 'BookController@listBookNone')->name('list-book-none');
+
+        Route::get('list-book-borrow', 'BookController@listBookBorrow')->name('list-book-borrow');
+
+        Route::get('list-book-view', 'BookController@listBookView')->name('list-book-view');
+
+        Route::post('book/book/destroyAjax', 'BookController@destroyAjax')->name('book.destroy.ajax');
 
         Route::post('book/update-ajax', 'BookController@updateAjax')->name('book.update.ajax');
 
+        Route::get('book/edit', 'BookController@updateAjax');
+
         Route::get('/trash-author', 'TrashedController@viewAuthor')->name('trash-author');
 
-        Route::put('/trash-author/restore', 'TrashedController@restoreAuthor')->name('trash-author.restore');
+        Route::post('/trash-author/restore', 'TrashedController@restoreAuthor')->name('trash-author.restore');
 
-        Route::delete('/trash-author/delete', 'TrashedController@deleteAuthor')->name('trash-author.delete');
+        Route::post('/trash-author/deleteAjax', 'TrashedController@deleteAuthor')->name('trash-author.deleteAjax');
 
         Route::get('/trash-book', 'TrashedController@viewBook')->name('trash-book');
 
-        Route::put('/trash-book/restore', 'TrashedController@restoreBook')->name('trash-book.restore');
+        Route::post('/trash-book/restore', 'TrashedController@restoreBook')->name('trash-book.restore');
 
-        Route::delete('/trash-book/delete', 'TrashedController@deleteBook')->name('trash-book.delete');
+        Route::post('trash-book/deleteAjax', 'TrashedController@deleteBook')->name('trash-book.deleteAjax');
 
         Route::resource('user', 'UserController');
 

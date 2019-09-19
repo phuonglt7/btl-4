@@ -1,25 +1,24 @@
 @extends('layouts.app')
-
 @section('execute')
-<div class="float-right">
-    @include('layouts.announce')
+<div class="float-right alert">
 </div>
+<br/>
 <h3> QUẢN LÝ SÁCH </h3>
-<!-- Button to Open the Modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-  Xóa tất cả
-</button>
-<!-- The Modal -->
 <ul class="nav nav-tabs float-right">
     <li class="nav-item">
-        <a class="nav-link {{ (\Request::route()->getName() == 'trash-author') ? 'active' : '' }}" href="{{ route('trash-author') }}">Tác giả</a>
+        <a class="nav-link list-trashed" data-href="{{ route('trash-author') }}" data-url="trash-author">Tác giả</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ (\Request::route()->getName() == 'trash-book') ? 'active' : '' }}" href="{{ route('trash-book') }}">Sách</a>
+        <a class="nav-link list-trashed" data-href="{{ route('trash-book') }}" data-url="trash-book">Sách</a>
     </li>
 </ul>
-<table class="table table-bordered data-table">
- @yield('content-trashed')
-</table>
-{{ $view->links() }}
-@endsection
+<div id ="table">
+    @if($status == "author" )
+    @include('trashed.indexAuthor')
+    @else
+    @include('trashed.indexBook')
+    @endif
+</div>
+ <script src="{{ asset('js/trashPaginate.js') }}"></script>
+    @endsection
+

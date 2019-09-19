@@ -46,24 +46,4 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Book', 'book_user')->withPivot('borrow_day', 'pay_day');
     }
-
-    public function paginateUser()
-    {
-        return $this->paginate(5);
-    }
-
-    public function findPivot($id)
-    {
-        return $this->find($id)->books();
-    }
-
-    public function updateUser($id, array $attributes)
-    {
-        $result = $this->find($id);
-        if ($result) {
-            $result->update($attributes);
-            return $result;
-        }
-        return false;
-    }
 }

@@ -9,7 +9,9 @@
             <div class="modal-body">
                 <div class="form-group d-flex">
                     <label class="col-sm-3 col-form-label">Tác giả:</label>
-                    <input type="text" name="author_name" size="30">
+                    <div class ="col-sm-8">
+                        <input type="text" name="author_name" size="30"/>
+                    </div>
                 </div>
             </div>
             <!-- Modal footer -->
